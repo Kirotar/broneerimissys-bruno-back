@@ -12,4 +12,10 @@ public class Demo {
     public String demo() {
         return "Hello World";
     }
+
+/*    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }*/
+
 }
