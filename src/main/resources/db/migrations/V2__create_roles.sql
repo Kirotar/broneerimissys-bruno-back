@@ -1,4 +1,0 @@
-create table PUBLIC.ROLES
-(
-    ROLE CHARACTER VARYING(50)
-);

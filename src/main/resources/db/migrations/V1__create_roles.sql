@@ -1,0 +1,6 @@
+CREATE TABLE PUBLIC.roles
+(
+    role_id INT PRIMARY KEY AUTO_INCREMENT,
+    role VARCHAR(50),
+    created_at TIMESTAMP
+);

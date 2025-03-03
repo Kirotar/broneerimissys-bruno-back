@@ -1,4 +1,0 @@
-create table PUBLIC.USERS
-(
-    NAME CHARACTER VARYING(50)
-);
