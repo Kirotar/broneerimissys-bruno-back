@@ -13,9 +13,6 @@ public class Demo {
         return "Hello World";
     }
 
-/*    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }*/
+
 
 }

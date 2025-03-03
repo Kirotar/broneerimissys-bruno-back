@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -26,9 +28,26 @@ public class Room {
     @Column(name = "KEYWORDS", length = 150)
     private String keywords;
 
-    @Column(name = "PRICE")
-    private Integer price;
+    @Column (name = "PRICE")
+    private BigDecimal price;
 
     @Column(name = "FLOOR")
     private Integer floor;
+
+    @Column( name = "ROOM_NUMBER", length = 10)
+    private String roomNumber;
+
+    @Column( name = "EQUIPMENT", length = 150)
+    private String equipment;
+
+    @Column( name = "PERMISSIONS", length = 10)
+    private String permission;
+
+    @Column( name = "EXCEPTIONS", length = 150)
+    private String exceptions;
+
+    @Column (name = "ROOM_SIZE")
+    private BigDecimal roomSize;
+
+
 }
