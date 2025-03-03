@@ -1,0 +1,6 @@
+ALTER TABLE rooms ADD room_number VARCHAR(10);
+ALTER TABLE rooms ADD room_size DECIMAL(10,2);
+ALTER TABLE rooms ADD equipment VARCHAR(150);
+ALTER TABLE rooms ADD permission VARCHAR(10);
+ALTER TABLE rooms ADD exceptions VARCHAR(150);
+ALTER TABLE rooms ALTER COLUMN price DECIMAL(10,2);
