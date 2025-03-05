@@ -40,7 +40,7 @@ public class Room {
     @Column( name = "EQUIPMENT", length = 150)
     private String equipment;
 
-    @Column( name = "PERMISSIONS", length = 10)
+    @Column( name = "PERMISSION", length = 10)
     private String permission;
 
     @Column( name = "EXCEPTIONS", length = 150)
