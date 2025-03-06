@@ -1,9 +1,9 @@
 package ee.rara.bruno.bruno.controller;
 
+import ee.rara.bruno.bruno.dto.RoomChangeRequest;
 import ee.rara.bruno.bruno.dto.RoomSearch;
 import ee.rara.bruno.bruno.model.Room;
 import ee.rara.bruno.bruno.service.RoomService;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +31,8 @@ public class RoomController {
 
 
     @PostMapping("/add-room")
-    public void createRoom(@Valid Room room) {
-        roomService.createRoom(room);
+    public void createRoom(@RequestBody RoomChangeRequest request) {
+        roomService.createRoom(request);
     }
 
     @DeleteMapping("/delete-room/{id}")
@@ -41,7 +41,7 @@ public class RoomController {
     }
 
     @PutMapping("/change-room/{id}")
-    public void updateRoom(@PathVariable("id") int id, @Valid Room room) {
-        roomService.updateRoom(id, room);
+    public void updateRoom(@PathVariable("id") int id, @RequestBody RoomChangeRequest updateRequest) {
+        roomService.updateRoom(id, updateRequest);
     }
 }
