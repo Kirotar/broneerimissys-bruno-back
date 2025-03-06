@@ -33,11 +33,11 @@ public class Booking {
     @Column(name = "IS_PAID")
     private Boolean isPaid;
 
-    @Column(name = "CHECK_IN")
-    private Instant checkIn;
+    @Column(name = "START_TIME")
+    private Instant startTime;
 
-    @Column(name = "CHECK_OUT")
-    private Instant checkOut;
+    @Column(name = "END_TIME")
+    private Instant endTime;
 
     @Column(name = "CREATED_AT")
     private Instant createdAt;
