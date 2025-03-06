@@ -1,15 +1,15 @@
 package ee.rara.bruno.bruno.controller;
 
+import ee.rara.bruno.bruno.dto.RoomSearch;
 import ee.rara.bruno.bruno.model.Room;
 import ee.rara.bruno.bruno.service.RoomService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/ruumid")
+@RequestMapping("/rooms")
 public class RoomController {
 
     private final RoomService roomService;
@@ -21,5 +21,27 @@ public class RoomController {
     @GetMapping("/all")
     public List<Room> getAllRooms() {
         return roomService.getAllRooms();
+    }
+
+
+    @GetMapping("/search")
+    public List<Room> getSearchedRooms(@ModelAttribute RoomSearch search) {
+        return roomService.findSearchedRooms(search);
+    }
+
+
+    @PostMapping("/add-room")
+    public void createRoom(@Valid Room room) {
+        roomService.createRoom(room);
+    }
+
+    @DeleteMapping("/delete-room/{id}")
+    public void deleteRoom(@PathVariable("id") int id) {
+        roomService.deleteRoom(id);
+    }
+
+    @PutMapping("/change-room/{id}")
+    public void updateRoom(@PathVariable("id") int id, @Valid Room room) {
+        roomService.updateRoom(id, room);
     }
 }

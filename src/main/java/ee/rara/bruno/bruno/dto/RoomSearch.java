@@ -22,8 +22,7 @@ public class RoomSearch {
     private Integer floor;
 
     //Currently room table rooms don't have good keywords
-    private List<String> keywords;
-
+    private String keywords;
 
     // Currently not in use, ideas for future
    /* private BigDecimal maxPrice;
