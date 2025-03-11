@@ -13,11 +13,9 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
-    private final BookingRepository bookingRepository;
 
-    public BookingController(BookingService bookingService, BookingRepository bookingRepository) {
+    public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
-        this.bookingRepository = bookingRepository;
     }
 
     @PostMapping("/temp-booking")
@@ -30,8 +28,18 @@ public class BookingController {
         return bookingService.addBooking(booking);
     }
 
+    @PostMapping("/add-repeat-booking")
+    public List<Booking> addRepeatedBooking(@RequestBody BookingRequest booking) {
+        return bookingService.addRepeatedBooking(booking);
+    }
+
+
     @DeleteMapping("/delete-booking/{id}")
     public void deleteBookingById(@PathVariable ("id") int id) {
+        //If less than 7d to booking
+        //Return money
+        //Else
+        //No refund
         bookingService.deleteBooking(id);
     }
 
@@ -40,15 +48,21 @@ public class BookingController {
         return bookingService.getUserBookingsById(id);
     }
 
-    //temporarily make booking
+    //admin
+    @GetMapping("/all-bookings")
+    public List<Booking> getAllBookings() {
+        return bookingService.getAllBookings();
+    }
 
-    //send pin
+    @GetMapping("/payment")
+    public String bookingPaymentStatus(String status) {
+        return bookingService.bookingPaymentStatus(status);
+    }
 
-    //payment
-
-    //see user bookings
-
-    //admin see all bookings
+    @GetMapping("/pin/{id}")
+    public String bookingPin(@PathVariable("id") int id) {
+        return bookingService.bookingPin(id);
+    }
 
     //make an enquiry room or eduevent
 

@@ -21,7 +21,7 @@ public class BookingService {
     public void temporaryBooking(BookingRequest booking) {
         //Reserve for 10min
         //If payment
-        //Save to repo
+        //addBooking
         //Else
         //Delete
     }
@@ -30,6 +30,13 @@ public class BookingService {
         //isavailable
         //is less than 10
         //is less than 3h
+    }
+
+    public List<Booking> addRepeatedBooking(List<BookingRequest> bookings) {
+        //if available
+        //loop (nr of weeks), +7 /up to 10x/is it possible to book 10weeks ahead?
+        // Save all
+
     }
 
     public void deleteBooking(int id) {
@@ -41,5 +48,18 @@ public class BookingService {
         return bookingRepository.findAllByUserId(userId);
     }
 
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
+    }
+
+    public String bookingPaymentStatus(String status) {
+        return "Booking payment status: Success";
+    }
+
+    public String bookingPin(int id){
+        //send to doorsystem with roomid, date-time of booking
+        //send an email/sms
+        return "Booking Pin: 123";
+    }
 
 }
