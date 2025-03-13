@@ -2,41 +2,72 @@ package ee.rara.bruno.bruno.service;
 
 import ee.rara.bruno.bruno.dto.BookingRequest;
 import ee.rara.bruno.bruno.model.Booking;
+import ee.rara.bruno.bruno.model.Room;
+import ee.rara.bruno.bruno.model.User;
 import ee.rara.bruno.bruno.repository.BookingRepository;
+import ee.rara.bruno.bruno.repository.RoomRepository;
+import ee.rara.bruno.bruno.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BookingService {
 
-    private final BookingRepository roomBookingRepository;
-    private final BookingRepository bookingRepository;
+    private final int maxNrOfBookingsPerUser = 10;
 
-    public BookingService(BookingRepository roomBookingRepository, BookingRepository bookingRepository) {
-        this.roomBookingRepository = roomBookingRepository;
+    private final RoomRepository roomRepository;
+    private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
+
+    public BookingService(RoomRepository roomRepository, BookingRepository bookingRepository, UserRepository userRepository) {
+        this.roomRepository = roomRepository;
         this.bookingRepository = bookingRepository;
+        this.userRepository = userRepository;
     }
 
     public void temporaryBooking(BookingRequest booking) {
-        //Reserve for 10min
-        //If payment
-        //addBooking
-        //Else
-        //Delete
+        addBooking(booking);
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.schedule(() -> {
+            if (!booking.getIsPaid()) {
+                deleteBooking(booking.getBookingId());
+            }
+            executor.shutdown();
+        }, 10, TimeUnit.MINUTES);
     }
 
-    public List<Booking> addBooking(BookingRequest booking) {
-        //isavailable
-        //is less than 10
-        //is less than 3h
+    public void addBooking(BookingRequest request) {
+
+        if (request.getIsAvailable() && isNrOfBookingsLessThanMax(request.getBookingId())) {
+            Room room = roomRepository.findById(request.getRoomId())
+                    .orElseThrow(() -> new EntityNotFoundException("Room not found"));
+
+            User user = userRepository.findById(request.getRoomId())
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            Booking booking = new Booking();
+            booking.setRoom(room);
+            booking.setUser(user);
+            booking.setStartTime(request.getStartTime());
+            booking.setEndTime(request.getEndTime());
+            bookingRepository.save(booking);
+        }
     }
 
-    public List<Booking> addRepeatedBooking(List<BookingRequest> bookings) {
-        //if available
-        //loop (nr of weeks), +7 /up to 10x/is it possible to book 10weeks ahead?
-        // Save all
-
+    public void addRepeatedBooking(BookingRequest bookings) {
+        int numberOfWeeksToRepeat = bookings.getNumberOfWeeksToRepeat();
+        addBooking(bookings);
+        for(int i = 0; i < numberOfWeeksToRepeat; i++) {
+            bookings.setStartTime(bookings.getStartTime().plus(7, ChronoUnit.DAYS));
+            bookings.setEndTime(bookings.getStartTime().plus(7, ChronoUnit.DAYS));
+            addBooking(bookings);
+        }
     }
 
     public void deleteBooking(int id) {
@@ -52,14 +83,24 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public String bookingPaymentStatus(String status) {
-        return "Booking payment status: Success";
+    public String bookingPaymentStatus(boolean status) {
+        if (status) {
+            return "Makse teostatud";
+        } else {
+            return "Makse tagasilükatud";
+        }
     }
 
-    public String bookingPin(int id){
+    public String bookingPin(int id) {
         //send to doorsystem with roomid, date-time of booking
         //send an email/sms
         return "Booking Pin: 123";
     }
 
+    //kuidagi peaks siin kasutaja saama juba enne teada, et tal on max täis kui tal nt on 6 broni
+    // ja tahab veel 6 teha, et ei broneeriks esimest nelja ja teisi mitte.
+    public boolean isNrOfBookingsLessThanMax(int id) {
+        List<Booking> userBookings = bookingRepository.findAllByUserId(id);
+        return userBookings.size() < maxNrOfBookingsPerUser;
+    }
 }

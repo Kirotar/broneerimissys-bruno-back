@@ -24,15 +24,14 @@ public class BookingController {
     }
 
     @PostMapping("/add-booking")
-    public List<Booking> addBooking(@RequestBody BookingRequest booking) {
-        return bookingService.addBooking(booking);
+    public void addBooking(@RequestBody BookingRequest booking) {
+        bookingService.addBooking(booking);
     }
 
     @PostMapping("/add-repeat-booking")
-    public List<Booking> addRepeatedBooking(@RequestBody BookingRequest booking) {
-        return bookingService.addRepeatedBooking(booking);
+    public void addRepeatedBooking(@RequestBody BookingRequest booking) {
+        bookingService.addRepeatedBooking(booking);
     }
-
 
     @DeleteMapping("/delete-booking/{id}")
     public void deleteBookingById(@PathVariable ("id") int id) {
@@ -55,7 +54,7 @@ public class BookingController {
     }
 
     @GetMapping("/payment")
-    public String bookingPaymentStatus(String status) {
+    public String bookingPaymentStatus(boolean status) {
         return bookingService.bookingPaymentStatus(status);
     }
 
