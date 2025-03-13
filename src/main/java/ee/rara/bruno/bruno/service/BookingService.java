@@ -10,6 +10,7 @@ import ee.rara.bruno.bruno.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -36,7 +37,7 @@ public class BookingService {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         executor.schedule(() -> {
             if (!booking.getIsPaid()) {
-                deleteBooking(booking.getBookingId());
+                deleteBooking(booking);
             }
             executor.shutdown();
         }, 10, TimeUnit.MINUTES);
@@ -57,6 +58,8 @@ public class BookingService {
             booking.setStartTime(request.getStartTime());
             booking.setEndTime(request.getEndTime());
             bookingRepository.save(booking);
+
+            bookingPin(request.getBookingId());
         }
     }
 
@@ -70,9 +73,16 @@ public class BookingService {
         }
     }
 
-    public void deleteBooking(int id) {
-        bookingRepository.deleteById(id);
-        //Keep record somewhere?
+    public void deleteBooking(BookingRequest booking) {
+        Instant now = Instant.now();
+        Instant sevenDaysFromNow = now.plus(7, ChronoUnit.DAYS);
+        if(booking.getStartTime().isAfter(sevenDaysFromNow)){
+            System.out.println("Raha tagastatakse 3 tööpäeva jooksul");
+        } else {
+            System.out.println("Raha enam ei saa tagastada");
+        }
+        bookingRepository.deleteById(booking.getBookingId());
+        //save to deleted records? Mark deleted but don't remove from table?
     }
 
     public List<Booking> getUserBookingsById(int userId) {
@@ -94,6 +104,7 @@ public class BookingService {
     public String bookingPin(int id) {
         //send to doorsystem with roomid, date-time of booking
         //send an email/sms
+
         return "Booking Pin: 123";
     }
 

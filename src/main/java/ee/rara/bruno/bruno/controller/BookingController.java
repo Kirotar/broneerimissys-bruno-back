@@ -33,13 +33,9 @@ public class BookingController {
         bookingService.addRepeatedBooking(booking);
     }
 
-    @DeleteMapping("/delete-booking/{id}")
-    public void deleteBookingById(@PathVariable ("id") int id) {
-        //If less than 7d to booking
-        //Return money
-        //Else
-        //No refund
-        bookingService.deleteBooking(id);
+    @DeleteMapping("/delete-booking}")
+    public void deleteBooking(@RequestBody BookingRequest booking) {
+        bookingService.deleteBooking(booking);
     }
 
     @GetMapping("/get-bookings/{id}")
