@@ -4,6 +4,8 @@ import ee.rara.bruno.bruno.dto.RoomChangeRequest;
 import ee.rara.bruno.bruno.dto.RoomSearch;
 import ee.rara.bruno.bruno.model.Room;
 import ee.rara.bruno.bruno.service.RoomService;
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class RoomController {
     }
 
     @GetMapping("/all")
+    @Operation(summary = "Kõik ruumid")
     public List<Room> getAllRooms() {
         return roomService.getAllRooms();
     }
