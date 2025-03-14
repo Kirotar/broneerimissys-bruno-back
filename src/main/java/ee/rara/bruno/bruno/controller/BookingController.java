@@ -33,7 +33,7 @@ public class BookingController {
         bookingService.addRepeatedBooking(booking);
     }
 
-    @DeleteMapping("/delete-booking}")
+    @DeleteMapping("/delete-booking")
     public void deleteBooking(@RequestBody BookingRequest booking) {
         bookingService.deleteBooking(booking);
     }
