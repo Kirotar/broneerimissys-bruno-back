@@ -93,13 +93,6 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public String bookingPaymentStatus(boolean status) {
-        if (status) {
-            return "Makse teostatud";
-        } else {
-            return "Makse tagasilükatud";
-        }
-    }
 
     public String bookingPin(int id) {
         //send to doorsystem with roomid, date-time of booking

@@ -4,6 +4,7 @@ import ee.rara.bruno.bruno.dto.BookingRequest;
 import ee.rara.bruno.bruno.model.Booking;
 import ee.rara.bruno.bruno.repository.BookingRepository;
 import ee.rara.bruno.bruno.service.BookingService;
+import ee.rara.bruno.bruno.service.PaymentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,9 +14,11 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final PaymentService paymentService;
 
-    public BookingController(BookingService bookingService) {
+    public BookingController(BookingService bookingService, PaymentService paymentService) {
         this.bookingService = bookingService;
+        this.paymentService = paymentService;
     }
 
     @PostMapping("/temp-booking")
@@ -47,11 +50,6 @@ public class BookingController {
     @GetMapping("/all-bookings")
     public List<Booking> getAllBookings() {
         return bookingService.getAllBookings();
-    }
-
-    @GetMapping("/payment")
-    public String bookingPaymentStatus(boolean status) {
-        return bookingService.bookingPaymentStatus(status);
     }
 
     @GetMapping("/pin/{id}")
