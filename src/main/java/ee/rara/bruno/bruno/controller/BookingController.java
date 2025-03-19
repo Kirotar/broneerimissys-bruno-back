@@ -1,8 +1,8 @@
 package ee.rara.bruno.bruno.controller;
 
 import ee.rara.bruno.bruno.dto.BookingRequest;
+import ee.rara.bruno.bruno.dto.RoomSearch;
 import ee.rara.bruno.bruno.model.Booking;
-import ee.rara.bruno.bruno.repository.BookingRepository;
 import ee.rara.bruno.bruno.service.BookingService;
 import ee.rara.bruno.bruno.service.PaymentService;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +42,12 @@ public class BookingController {
     }
 
     @GetMapping("/get-bookings/{id}")
-    public List<Booking> getUserBookingsById(@PathVariable ("id") int id) {
-        return bookingService.getUserBookingsById(id);
+    public List<Booking> getUserBookingsByUserId(@PathVariable ("id") int id) {
+        return bookingService.getUserBookingsByUserId(id);
+    }
+    @GetMapping("/get-room-availability")
+    public List<Booking> getRoomAvailability(@ModelAttribute BookingRequest query) {
+        return bookingService.getRoomAvailability(query);
     }
 
     //admin

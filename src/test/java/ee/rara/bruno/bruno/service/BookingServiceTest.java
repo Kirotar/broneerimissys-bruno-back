@@ -53,13 +53,13 @@ class BookingServiceTest {
         when(bookingRepository.findAllByUserId(anyInt())).thenReturn(List.of(BOOKING1, BOOKING1));
         when(bookingRepository.findAllByUserId(eq(123))).thenReturn(List.of(BOOKING1));
 
-        List<Booking> userBookingsById = bookingService.getUserBookingsById(123);
-        assertEquals( 1, userBookingsById.size());
-        Booking booking = userBookingsById.get(0);
+        List<Booking> userBookingsByUserId = bookingService.getUserBookingsByUserId(123);
+        assertEquals( 1, userBookingsByUserId.size());
+        Booking booking = userBookingsByUserId.get(0);
         assertEquals(BOOKING1, booking);
 
-        userBookingsById = bookingService.getUserBookingsById(345);
-        assertEquals( 2, userBookingsById.size());
+        userBookingsByUserId = bookingService.getUserBookingsByUserId(345);
+        assertEquals( 2, userBookingsByUserId.size());
     }
 
 

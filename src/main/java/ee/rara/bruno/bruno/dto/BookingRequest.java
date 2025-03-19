@@ -1,6 +1,7 @@
 package ee.rara.bruno.bruno.dto;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.Instant;
 
 @Getter

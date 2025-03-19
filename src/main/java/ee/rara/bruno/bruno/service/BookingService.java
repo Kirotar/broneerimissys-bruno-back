@@ -85,7 +85,7 @@ public class BookingService {
         //save to deleted records? Mark deleted but don't remove from table?
     }
 
-    public List<Booking> getUserBookingsById(int userId) {
+    public List<Booking> getUserBookingsByUserId(int userId) {
         return bookingRepository.findAllByUserId(userId);
     }
 
@@ -93,6 +93,9 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
+    public List<Booking> getRoomAvailability(BookingRequest query) {
+        return bookingRepository.findIfAvailableByRoomId(query.getRoomId(), query.getStartTime(), query.getEndTime());
+    }
 
     public String bookingPin(int id) {
         //send to doorsystem with roomid, date-time of booking
