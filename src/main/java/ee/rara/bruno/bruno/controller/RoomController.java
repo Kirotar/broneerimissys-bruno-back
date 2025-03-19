@@ -26,12 +26,10 @@ public class RoomController {
         return roomService.getAllRooms();
     }
 
-
     @GetMapping("/search")
     public List<Room> getSearchedRooms(@ModelAttribute RoomSearch search) {
         return roomService.findSearchedRooms(search);
     }
-
 
     @PostMapping("/add-room")
     public void createRoom(@RequestBody RoomChangeRequest request) {
