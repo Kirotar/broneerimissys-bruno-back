@@ -6,20 +6,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query("SELECT b FROM Booking b WHERE b.user = :userId")
     List<Booking> findAllByUserId(int userId);
 
-    @Query("SELECT b FROM Booking b WHERE b.room = :roomId " +
-    "AND b.startTime = :startTime " +
-    "AND b.endTime = :endTime")
-    List<Booking> findIfAvailableByRoomId(
+    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END FROM Booking b WHERE b.room = :roomId " +
+            "AND ((:startTime BETWEEN b.startTime AND b.endTime) " +
+            "OR (:endTime BETWEEN b.startTime AND b.endTime) " +
+            "OR (b.startTime BETWEEN :startTime AND :endTime))")
+    boolean existsBookingForRoom(
             @Param("roomId") int roomId,
-            @Param("startDateTime") Instant startTime,
-            @Param("endDateTime") Instant endTime);
+            @Param("startTime") Instant startTime,
+            @Param("endTime") Instant endTime);
 
 
 }

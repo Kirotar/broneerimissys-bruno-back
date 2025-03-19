@@ -93,8 +93,8 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public List<Booking> getRoomAvailability(BookingRequest query) {
-        return bookingRepository.findIfAvailableByRoomId(query.getRoomId(), query.getStartTime(), query.getEndTime());
+    public boolean isRoomAvailable(BookingRequest query) {
+        return !bookingRepository.existsBookingForRoom(query.getRoomId(), query.getStartTime(), query.getEndTime());
     }
 
     public String bookingPin(int id) {

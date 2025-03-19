@@ -5,10 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -19,9 +21,16 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Bean
+
+/*    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        http.csrf(customizer -> customizer.disable());
+        return http.build();}*/
+
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
@@ -30,23 +39,29 @@ public class WebSecurityConfig {
                         .requestMatchers("/", "/home", "/login", "/h2-console/**", "/swagger-ui/**", "/v3/api-docs", "/rooms/**", "/booking/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin((form) -> form
+                .formLogin(formLogin -> formLogin.disable())
+                .httpBasic(httpBasic -> httpBasic.disable());
+        return http.build();
+    }
+
+/*                .formLogin((form) -> form
                         //.loginPage("/login")
                         .defaultSuccessUrl("/demo", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
-                )
-/*                           .exceptionHandling((exceptions) -> exceptions
+                )*/
+/*                          .exceptionHandling((exceptions) -> exceptions
                    .authenticationEntryPoint((request, response, authException) -> {
                        RequestCache requestCache = new HttpSessionRequestCache();
                        requestCache.saveRequest(request, response);
                        response.sendRedirect("/login");
                    })
            )*/
+/*
                 .logout(LogoutConfigurer::permitAll);
 
-        return http.build();
-    }
+
+        return http.build(); }*/
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

@@ -46,8 +46,8 @@ public class BookingController {
         return bookingService.getUserBookingsByUserId(id);
     }
     @GetMapping("/get-room-availability")
-    public List<Booking> getRoomAvailability(@ModelAttribute BookingRequest query) {
-        return bookingService.getRoomAvailability(query);
+    public boolean getRoomAvailability(@ModelAttribute BookingRequest query) {
+        return bookingService.isRoomAvailable(query);
     }
 
     //admin
