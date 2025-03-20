@@ -1,0 +1,2 @@
+UPDATE rooms SET floor = 9 WHERE floor IS NULL;
+ALTER TABLE rooms ALTER COLUMN floor INT NOT NULL;
