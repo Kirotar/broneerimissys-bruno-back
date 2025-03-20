@@ -1,0 +1,1 @@
+UPDATE rooms SET floor = 'teadmata' WHERE floor IS NULL;
