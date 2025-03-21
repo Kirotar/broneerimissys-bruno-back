@@ -39,17 +39,12 @@ public class WebSecurityConfig {
                         .requestMatchers("/", "/home", "/login", "/h2-console/**", "/swagger-ui/**", "/v3/api-docs", "/rooms/**", "/booking/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(formLogin -> formLogin.disable())
-                .httpBasic(httpBasic -> httpBasic.disable());
-        return http.build();
-    }
-
-/*                .formLogin((form) -> form
+                .formLogin((form) -> form
                         //.loginPage("/login")
                         .defaultSuccessUrl("/demo", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
-                )*/
+                )
 /*                          .exceptionHandling((exceptions) -> exceptions
                    .authenticationEntryPoint((request, response, authException) -> {
                        RequestCache requestCache = new HttpSessionRequestCache();
@@ -57,11 +52,10 @@ public class WebSecurityConfig {
                        response.sendRedirect("/login");
                    })
            )*/
-/*
                 .logout(LogoutConfigurer::permitAll);
 
 
-        return http.build(); }*/
+        return http.build(); }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
