@@ -22,6 +22,10 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
+    public List<Room> getAllBookableRooms() {
+        return roomRepository.findAllRoomsThatCanBook();
+    }
+
     public boolean isRoomBookable(int id){
         return roomRepository.findIfCanBook(id);
     }
