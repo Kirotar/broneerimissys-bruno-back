@@ -31,6 +31,11 @@ public class RoomController {
         return roomService.findSearchedRooms(search);
     }
 
+    @GetMapping("/is-bookable/{id}")
+    public boolean isBookable(@PathVariable int id) {
+        return roomService.isRoomBookable(id);
+    }
+
     @PostMapping("/add-room")
     public void createRoom(@RequestBody RoomChangeRequest request) {
         roomService.createRoom(request);

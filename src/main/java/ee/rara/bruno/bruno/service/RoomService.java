@@ -22,6 +22,10 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
+    public boolean isRoomBookable(int id){
+        return roomRepository.findIfCanBook(id);
+    }
+
     public List<Room> findSearchedRooms(RoomSearch search) {
         return roomRepository.findAvailableRoomsWithFilters(search.getStartDateTime(), search.getEndDateTime(),
                 search.getMinCapacity(), search.getFloor(), search.getKeywords());
@@ -35,7 +39,7 @@ public class RoomService {
         room.setPrice(request.getPrice());
         room.setRoomNumber(request.getRoomNumber());
         room.setEquipment(request.getEquipment());
-        room.setPermission(request.getPermission());
+        room.setCanBook(request.getCanBook());
         room.setRoomSize(request.getRoomSize());
         room.setKeywords(request.getKeywords());
         roomRepository.save(room);
@@ -61,12 +65,12 @@ public class RoomService {
         room.setRoomNumber(dto.getRoomNumber());}
         if (dto.getEquipment() != null) {
         room.setEquipment(dto.getEquipment());}
-        if (dto.getPermission() != null) {
-        room.setPermission(dto.getPermission());}
         if (dto.getRoomSize() != null) {
         room.setRoomSize(dto.getRoomSize());}
         if (dto.getKeywords() != null) {
         room.setKeywords(dto.getKeywords());}
+        if (dto.getCanBook() != null) {
+        room.setCanBook(dto.getCanBook());}
 
              roomRepository.save(room);
     }

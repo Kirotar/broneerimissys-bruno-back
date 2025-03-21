@@ -40,8 +40,8 @@ public class Room {
     @Column( name = "EQUIPMENT", length = 150)
     private String equipment;
 
-    @Column( name = "PERMISSION", length = 10)
-    private String permission;
+    @Column( name = "CAN_BOOK")
+    private Boolean canBook;
 
     @Column( name = "EXCEPTIONS", length = 150)
     private String exceptions;

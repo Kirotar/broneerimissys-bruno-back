@@ -16,7 +16,7 @@ public class RoomChangeRequest {
     private int floor;
     private String roomNumber;
     private String equipment;
-    private String permission;
+    private Boolean canBook;
     private BigDecimal roomSize;
 
 }

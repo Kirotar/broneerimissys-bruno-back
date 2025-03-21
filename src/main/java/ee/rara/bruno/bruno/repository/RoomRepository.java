@@ -22,4 +22,10 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
             @Param("minCapacity") Integer minCapacity,
             @Param("floor") Integer floor,
             @Param("keyword") String keyword);
+
+    @Query("SELECT CASE WHEN EXISTS (SELECT r FROM Room r WHERE r.id = :id AND r.canBook = true) THEN true ELSE false END")
+    boolean findIfCanBook(int id);
+
+    @Query("SELECT r FROM Room r WHERE r.canBook = true")
+    List <Room> findAllRoomsThatCanBook();
 }

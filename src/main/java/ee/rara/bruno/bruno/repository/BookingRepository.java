@@ -12,7 +12,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query("SELECT b FROM Booking b WHERE b.user = :userId")
     List<Booking> findAllByUserId(int userId);
 
-    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END FROM Booking b WHERE b.room = :roomId " +
+    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END FROM Booking b WHERE b.room.id = :roomId " +
             "AND ((:startTime BETWEEN b.startTime AND b.endTime) " +
             "OR (:endTime BETWEEN b.startTime AND b.endTime) " +
             "OR (b.startTime BETWEEN :startTime AND :endTime))")
