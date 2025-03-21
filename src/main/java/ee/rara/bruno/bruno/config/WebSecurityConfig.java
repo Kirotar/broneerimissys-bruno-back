@@ -35,7 +35,11 @@ public class WebSecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
+                //Insomnia:
                 .authorizeHttpRequests((requests) -> requests
+                        .anyRequest().permitAll()
+                );
+/*                .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home", "/login", "/h2-console/**", "/swagger-ui/**", "/v3/api-docs", "/rooms/**", "/booking/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -44,7 +48,7 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/demo", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
-                )
+                )*/
 /*                          .exceptionHandling((exceptions) -> exceptions
                    .authenticationEntryPoint((request, response, authException) -> {
                        RequestCache requestCache = new HttpSessionRequestCache();
@@ -52,7 +56,7 @@ public class WebSecurityConfig {
                        response.sendRedirect("/login");
                    })
            )*/
-                .logout(LogoutConfigurer::permitAll);
+               // .logout(LogoutConfigurer::permitAll);
 
 
         return http.build(); }
