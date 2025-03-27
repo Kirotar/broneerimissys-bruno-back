@@ -87,6 +87,7 @@ public class BookingService {
         return bookingRepository.findAllByUserId(userId);
     }
 
+    //Is this needed? Will probably never be used. Maybe by date or room id instead.
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
@@ -101,6 +102,6 @@ public class BookingService {
     // ja tahab veel 6 teha, et ei broneeriks esimest nelja ja teisi mitte.
     public boolean isNrOfBookingsLessThanMax(int id) {
         List<Booking> userBookings = bookingRepository.findAllByUserId(id);
-        return userBookings.size() < maxNrOfBookingsPerUser;
+        return userBookings.size() <= maxNrOfBookingsPerUser;
     }
 }
