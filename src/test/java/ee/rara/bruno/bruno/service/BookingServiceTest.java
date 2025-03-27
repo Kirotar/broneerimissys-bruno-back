@@ -53,6 +53,25 @@ class BookingServiceTest {
     @Test
     void temporaryBooking_whenBookingWasNotPaid_shouldDeleteBooking() {}
 
+    @Test
+    void addBooking_whenBookingIsValid_shouldAddBooking() {}
+
+    @Test
+    void addBooking_whenBookingIsInvalid_shouldThrowException() {}
+
+    @Test
+    void addBooking_whenTimeIsNotAvailable_shouldThrowException() {}
+
+    @Test
+    void addBooking_whenNumberOfBookingsIsOverMaximum_shouldThrowException() {}
+
+    @Test
+    void addRepeatedBookings_whenBookingisValid_shouldAddRepeatedBooking(){
+    }
+
+    @Test
+    void addRepeatedBookings_whenNumberOfRepetitions_shouldRepeatEverySevenDays(){
+    }
 
     @Test
     void deleteBookingById_whenHasBookingId_thenDeleteBookingWithId() {
@@ -114,6 +133,23 @@ class BookingServiceTest {
     void getAllBookings_whenBookingsIsEmpty_thenReturnEmptyList() {
 
     }
+
+    @Test
+    void isRoomAvailable_whenRoomIsAvailable_thenReturnTrue() {}
+
+    @Test
+    void isRoomAvailable_whenRoomIsNotAvailable_thenReturnFalse() {}
+
+
+    @Test
+    void isNrOfBookingsLessThanMax_whenNrOfBookingsIsLessOrEqualThanMax_thenReturnTrue() {}
+
+    @Test
+    void isNrOfBookingsLessThanMax_whenNrOfBookingsIsMoreThanMax_thenReturnFalse() {}
+
+    @Test
+    void isNrOfBookingsLessThanMax_whenNoBookingsAreFound_thenReturnFalse() {}
+
 
     @ParameterizedTest
     @ValueSource(strings = {"see on vale ja peab olemafail", "see on vale ja peab olemafail"})
