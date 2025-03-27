@@ -20,7 +20,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
@@ -45,21 +45,46 @@ class BookingServiceTest {
     }
 
     @Test
-    void deleteBooking() {
+    void deleteBookingById_whenHasBookingId_thenReturnTrue() {
+        when(bookingRepository.existsById(eq(890))).thenReturn(true);
+        bookingService.deleteBookingById(890);
+        verify(bookingRepository, times(1)).deleteById(890);
     }
 
     @Test
-    void getUserBookingsById() {
-        when(bookingRepository.findAllByUserId(anyInt())).thenReturn(List.of(BOOKING1, BOOKING1));
+    void getUserBookingsById_whenUserHasOneBooking_thenReturnOneBooking() {
         when(bookingRepository.findAllByUserId(eq(123))).thenReturn(List.of(BOOKING1));
 
         List<Booking> userBookingsByUserId = bookingService.getUserBookingsByUserId(123);
         assertEquals( 1, userBookingsByUserId.size());
+
         Booking booking = userBookingsByUserId.get(0);
         assertEquals(BOOKING1, booking);
+    }
 
-        userBookingsByUserId = bookingService.getUserBookingsByUserId(345);
+    @Test
+    void getUserBookingsById_whenUserHasTwoBooking_thenReturnTwoBookings() {
+        when(bookingRepository.findAllByUserId(anyInt())).thenReturn(List.of(BOOKING1, BOOKING1));
+
+        List<Booking> userBookingsByUserId = bookingService.getUserBookingsByUserId(345);
+
         assertEquals( 2, userBookingsByUserId.size());
+    }
+
+    @Test
+    void getUserBookingsById_whenUserHasNoBooking_thenReturnEmptyList() {
+        when(bookingRepository.findAllByUserId(anyInt())).thenReturn(List.of());
+        List <Booking> userBookings =  bookingService.getUserBookingsByUserId(345);
+        assertTrue(userBookings.isEmpty(), "User bookings should be empty, but got " + userBookings);
+    }
+
+    @Test
+    void getUserBookingsById_whenRepositoryThrowsException_ShouldThrowServiceError() {
+        when(bookingRepository.findAllByUserId(anyInt())).thenThrow(new RuntimeException("Database error"));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> bookingService.getUserBookingsByUserId(345));
+
+        assertEquals("Database error", exception.getMessage());
     }
 
 
