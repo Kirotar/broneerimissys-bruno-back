@@ -45,10 +45,28 @@ class BookingServiceTest {
     }
 
     @Test
-    void deleteBookingById_whenHasBookingId_thenReturnTrue() {
-        when(bookingRepository.existsById(eq(890))).thenReturn(true);
+    void temporaryBooking_whenBookingIsSent_shouldAddBooking() {}
+
+    @Test
+    void temporaryBooking_whenBookingIsInvalid_shouldThrowException() {}
+
+    @Test
+    void temporaryBooking_whenBookingWasNotPaid_shouldDeleteBooking() {}
+
+
+    @Test
+    void deleteBookingById_whenHasBookingId_thenDeleteBookingWithId() {
+        when(bookingRepository.existsById(890)).thenReturn(true);
         bookingService.deleteBookingById(890);
+        verify(bookingRepository, times(1)).existsById(890);
         verify(bookingRepository, times(1)).deleteById(890);
+    }
+
+    @Test
+    void deleteBookingById_whenBookingDoesNotExist_thenDoNothing() {
+        when(bookingRepository.existsById(890)).thenReturn(false);
+        bookingService.deleteBookingById(890);
+        verify(bookingRepository, never()).deleteById(anyInt());
     }
 
     @Test
@@ -87,9 +105,14 @@ class BookingServiceTest {
         assertEquals("Database error", exception.getMessage());
     }
 
+    @Test
+    void getAllBookings_whenBookingsExist_thenGetAllBookings() {
+
+    }
 
     @Test
-    void getAllBookings() {
+    void getAllBookings_whenBookingsIsEmpty_thenReturnEmptyList() {
+
     }
 
     @ParameterizedTest
@@ -101,7 +124,5 @@ class BookingServiceTest {
         assertNotEquals("Booking payment status: Success", bookingService.bookingPaymentStatus("see on vale ja peab olemafail"));*/
     }
 
-    @Test
-    void bookingPin() {
-    }
+
 }
