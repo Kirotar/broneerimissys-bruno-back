@@ -64,10 +64,6 @@ public class BookingController {
         return bookingService.getAllBookings();
     }
 
-    @GetMapping("/pin/{id}")
-    public String bookingPin(@PathVariable("id") int id) {
-        return bookingService.bookingPin(id);
-    }
 
     //make an enquiry room or eduevent
 

@@ -22,16 +22,19 @@ public class BookingService {
 
     private final int maxNrOfBookingsPerUser = 10;
 
+    private PINService pinService;
+
     private final RoomRepository roomRepository;
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final PaymentService paymentService;
 
-    public BookingService(RoomRepository roomRepository, BookingRepository bookingRepository, UserRepository userRepository, PaymentService paymentService) {
+    public BookingService(RoomRepository roomRepository, BookingRepository bookingRepository, UserRepository userRepository, PaymentService paymentService, PINService pinService) {
         this.roomRepository = roomRepository;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.paymentService = paymentService;
+        this.pinService = pinService;
     }
 
     public void temporaryBooking(BookingRequest booking) {
@@ -61,7 +64,7 @@ public class BookingService {
             booking.setEndTime(request.getEndTime());
             bookingRepository.save(booking);
 
-            bookingPin(request.getBookingId());
+            pinService.createBookingPinByBookingId(request.getBookingId());
         }
     }
 
@@ -92,12 +95,7 @@ public class BookingService {
         return !bookingRepository.existsBookingForRoom(query.getRoomId(), query.getStartTime(), query.getEndTime());
     }
 
-    public String bookingPin(int id) {
-        //send to doorsystem with roomid, date-time of booking
-        //send an email/sms
 
-        return "Booking Pin: 123";
-    }
 
     //kuidagi peaks siin kasutaja saama juba enne teada, et tal on max täis kui tal nt on 6 broni
     // ja tahab veel 6 teha, et ei broneeriks esimest nelja ja teisi mitte.
