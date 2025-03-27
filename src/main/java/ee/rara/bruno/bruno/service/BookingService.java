@@ -25,11 +25,13 @@ public class BookingService {
     private final RoomRepository roomRepository;
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
+    private final PaymentService paymentService;
 
-    public BookingService(RoomRepository roomRepository, BookingRepository bookingRepository, UserRepository userRepository) {
+    public BookingService(RoomRepository roomRepository, BookingRepository bookingRepository, UserRepository userRepository, PaymentService paymentService) {
         this.roomRepository = roomRepository;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
+        this.paymentService = paymentService;
     }
 
     public void temporaryBooking(BookingRequest booking) {
@@ -37,7 +39,7 @@ public class BookingService {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         executor.schedule(() -> {
             if (!booking.getIsPaid()) {
-                deleteBooking(booking);
+                deleteBookingById(booking.getBookingId());
             }
             executor.shutdown();
         }, 10, TimeUnit.MINUTES);
@@ -73,15 +75,8 @@ public class BookingService {
         }
     }
 
-    public void deleteBooking(BookingRequest booking) {
-        Instant now = Instant.now();
-        Instant sevenDaysFromNow = now.plus(7, ChronoUnit.DAYS);
-        if(booking.getStartTime().isAfter(sevenDaysFromNow)){
-            System.out.println("Raha tagastatakse 3 tööpäeva jooksul");
-        } else {
-            System.out.println("Raha enam ei saa tagastada");
-        }
-        bookingRepository.deleteById(booking.getBookingId());
+    public void deleteBookingById(int id) {
+        bookingRepository.deleteById(id);
         //save to deleted records? Mark deleted but don't remove from table?
     }
 

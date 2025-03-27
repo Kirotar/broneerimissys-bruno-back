@@ -40,10 +40,10 @@ public class BookingController {
         bookingService.addRepeatedBooking(booking);
     }
 
-    @DeleteMapping("/delete-booking")
-    @Operation(summary = "Kustutab broneeringu.")
-    public void deleteBooking(@RequestBody BookingRequest booking) {
-        bookingService.deleteBooking(booking);
+    @DeleteMapping("/delete-booking/{id}")
+    @Operation(summary = "Kustutab broneeringu broneeringu ID järgi.")
+    public void deleteBooking(@PathVariable ("id") int id) {
+        bookingService.deleteBookingById(id);
     }
 
     @GetMapping("/get-bookings/{id}")
