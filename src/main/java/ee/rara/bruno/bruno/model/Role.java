@@ -21,7 +21,4 @@ public class Role {
     @Column(name = "ROLE", length = 50)
     private String role;
 
-    @Column(name = "CREATED_AT")
-    private Instant createdAt;
-
 }
