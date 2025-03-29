@@ -28,7 +28,7 @@ public class User {
     private String lastName;
 
     @Size(max = 100)
-    @Column(name = "EMAIL", length = 100)
+    @Column(name = "EMAIL", length = 100, unique = true)
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
