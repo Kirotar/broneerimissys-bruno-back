@@ -76,7 +76,8 @@ public class BookingService {
     }
 
     public void deleteBookingById(int id) {
-        bookingRepository.deleteById(id);
+        if(bookingRepository.existsById(id)) {
+        bookingRepository.deleteById(id);}
         //save to deleted records? Mark deleted but don't remove from table?
     }
 
