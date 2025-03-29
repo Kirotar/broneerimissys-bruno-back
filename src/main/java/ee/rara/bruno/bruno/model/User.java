@@ -39,4 +39,7 @@ public class User {
     @Column(name = "CREATED_AT")
     private Instant createdAt;
 
+    @Size(max = 20)
+    @Column(name = "PASSWORD", length = 20)
+    private String password;
 }
