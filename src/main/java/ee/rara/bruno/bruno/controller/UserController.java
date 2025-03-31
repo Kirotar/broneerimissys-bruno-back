@@ -1,5 +1,6 @@
 package ee.rara.bruno.bruno.controller;
 
+import ee.rara.bruno.bruno.dto.RegisterRequest;
 import ee.rara.bruno.bruno.model.User;
 import ee.rara.bruno.bruno.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,16 +18,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/add")
-    public void addUser(@RequestBody User user) {
-        userService.addUser(user);
-    }
     //user
     //register
     //login
     //logout
     //change user
-
     //roles for admin: see users, add roles somehow?
 
 }

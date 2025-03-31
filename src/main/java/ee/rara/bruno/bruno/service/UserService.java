@@ -4,16 +4,21 @@ import ee.rara.bruno.bruno.model.User;
 import ee.rara.bruno.bruno.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+
 @Service
 public class UserService {
 
 private final UserRepository userRepository;
 
+
 public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
 }
 
-public void addUser(User user) {
-    userRepository.save(user);
-}
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 }
