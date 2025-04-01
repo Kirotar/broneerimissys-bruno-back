@@ -24,20 +24,20 @@ public class BookingController {
 
     @PostMapping("/temp-booking")
     @Operation(summary = "Teeb ajutiselt broneeringu.")
-    public void addTemporaryBooking(@RequestBody BookingRequest booking) {
-        bookingService.temporaryBooking(booking);
+    public void addTemporaryBooking(@RequestHeader("Authorization") String token, @RequestBody BookingRequest booking) {
+        bookingService.temporaryBooking(token, booking);
     }
 
     @PostMapping("/add-booking")
     @Operation(summary = "Lisab broneeringu andmebaasi.")
-    public void addBooking(@RequestBody BookingRequest booking) {
-        bookingService.addBooking(booking);
+    public void addBooking(@RequestHeader("Authorization") String token, @RequestBody BookingRequest booking) {
+        bookingService.addBooking(token, booking);
     }
 
     @PostMapping("/add-repeat-booking")
     @Operation(summary = "Lisab andmebaasi intervalli tagant korduva broneeringu.")
-    public void addRepeatedBooking(@RequestBody BookingRequest booking) {
-        bookingService.addRepeatedBooking(booking);
+    public void addRepeatedBooking(@RequestHeader("Authorization") String token, @RequestBody BookingRequest booking) {
+        bookingService.addRepeatedBooking(token, booking);
     }
 
     @DeleteMapping("/delete-booking/{id}")
