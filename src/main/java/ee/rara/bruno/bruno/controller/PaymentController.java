@@ -16,8 +16,8 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/payment")
-    public void bookingPaymentStatus(@RequestBody BookingRequest request) {
-        paymentService.bookingPaymentStatus(request);
+    @GetMapping("/status")
+    public boolean bookingPaymentStatus(@RequestBody BookingRequest request) {
+        return paymentService.bookingPaymentStatus(request);
     }
 }

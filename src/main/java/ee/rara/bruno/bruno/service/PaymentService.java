@@ -9,9 +9,10 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class PaymentService {
 
-    public void bookingPaymentStatus(BookingRequest request) {
+    public boolean bookingPaymentStatus(BookingRequest request) {
         boolean paymentStatus = Math.random() < 0.5;
         request.setIsPaid(paymentStatus);
+        return paymentStatus;
     }
 
     public void canBookingGetARefund(BookingRequest booking) {
