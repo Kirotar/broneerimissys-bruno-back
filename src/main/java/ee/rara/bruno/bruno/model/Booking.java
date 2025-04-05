@@ -14,6 +14,7 @@ import java.time.Instant;
 @Table(name = "BOOKING")
 public class Booking {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOOKING_ID", nullable = false)
     private Integer id;
 
@@ -27,11 +28,12 @@ public class Booking {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    //drop?
     @Column(name = "IS_BOOKED")
     private Boolean isBooked;
 
-    @Column(name = "IS_PAID")
-    private Boolean isPaid;
+    @Column(name = "IS_PAID", nullable = false)
+    private Boolean isPaid = false;
 
     @Column(name = "START_TIME")
     private Instant startTime;
@@ -39,8 +41,13 @@ public class Booking {
     @Column(name = "END_TIME")
     private Instant endTime;
 
-    @Column(name = "CREATED_AT")
+    @Column(name = "CREATED_AT", nullable = false)
     private Instant createdAt;
+
+    @PrePersist
+    private void onCreate() {
+        createdAt = Instant.now();
+    }
 
     @Column(name = "UPDATED_AT")
     private Instant updatedAt;
