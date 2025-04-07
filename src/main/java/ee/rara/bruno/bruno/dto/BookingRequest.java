@@ -13,7 +13,6 @@ public class BookingRequest {
     private Instant startTime;
     private Instant endTime;
     private Boolean isPaid;
-    private Boolean isAvailable;
     private int numberOfWeeksToRepeat;
 
 }

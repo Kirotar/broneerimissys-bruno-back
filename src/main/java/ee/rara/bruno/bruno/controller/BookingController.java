@@ -3,6 +3,7 @@ package ee.rara.bruno.bruno.controller;
 import ee.rara.bruno.bruno.dto.BookingRequest;
 import ee.rara.bruno.bruno.dto.RoomSearch;
 import ee.rara.bruno.bruno.model.Booking;
+import ee.rara.bruno.bruno.model.User;
 import ee.rara.bruno.bruno.service.BookingService;
 import ee.rara.bruno.bruno.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +25,7 @@ public class BookingController {
 
     @PostMapping("/temp-booking")
     @Operation(summary = "Teeb ajutiselt broneeringu.")
-    public void addTemporaryBooking(@RequestHeader("Authorization") String token, @RequestBody BookingRequest booking) {
+    public void addTemporaryBooking(@RequestHeader("Authorization") String token, @RequestBody List<BookingRequest> booking) {
         bookingService.temporaryBooking(token, booking);
     }
 
@@ -48,8 +49,8 @@ public class BookingController {
 
     @GetMapping("/get-bookings/{id}")
     @Operation(summary = "Kasutaja broneeringud ID järgi.")
-    public List<Booking> getUserBookingsByUserId(@PathVariable ("id") int id) {
-        return bookingService.getUserBookingsByUserId(id);
+    public List<Booking> getUserBookingsByUserId(@PathVariable ("id") User user) {
+        return bookingService.getUserBookingsByUser(user);
     }
     @GetMapping("/get-room-availability")
     @Operation(summary = "Kontrollib ruumi saadavust.")

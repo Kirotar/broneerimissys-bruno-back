@@ -39,12 +39,19 @@ public class BookingService {
         this.userService = userService;
     }
 
-    public void temporaryBooking(String token, BookingRequest booking) {
-        addBooking(token, booking);
+    public void temporaryBooking(String token, List<BookingRequest> booking) {
+        System.out.println("Received booking request: " + booking);
+        for (BookingRequest request  : booking) {
+            addBooking(token, request);
+        }
+
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         executor.schedule(() -> {
-            if (!booking.getIsPaid()) {
-                deleteBookingById(booking.getBookingId());
+            List<Booking> bookings = bookingRepository.findUnpaidBookings();
+            for (Booking tempBooking : bookings) {
+                if (!tempBooking.getIsPaid()) {
+                    deleteBookingById(tempBooking.getId());
+                }
             }
             executor.shutdown();
         }, 10, TimeUnit.MINUTES);
@@ -53,7 +60,12 @@ public class BookingService {
     public void addBooking(String token, BookingRequest request) {
         User user = userService.getUserFromToken(token);
 
-        if (request.getIsAvailable() && isNrOfBookingsLessThanMax(request.getBookingId())) {
+        System.out.println("User retrieved: " + user);
+
+        System.out.println("Checking booking limit: " + isNrOfBookingsLessThanMax(user));
+
+        if (isNrOfBookingsLessThanMax(user)){
+            System.out.println("Received booking request for room ID: " + request.getRoomId());
             Room room = roomRepository.findById(request.getRoomId())
                     .orElseThrow(() -> new EntityNotFoundException("Room not found"));
 
@@ -63,15 +75,18 @@ public class BookingService {
             booking.setStartTime(request.getStartTime());
             booking.setEndTime(request.getEndTime());
             bookingRepository.save(booking);
+            System.out.println("Booking saved: " + booking);
 
             bookingPin(request.getBookingId());
+        } else {
+            System.out.println("Booking request failed due to availability or limit.");
         }
     }
 
     public void addRepeatedBooking(String token, BookingRequest bookings) {
         int numberOfWeeksToRepeat = bookings.getNumberOfWeeksToRepeat();
         addBooking(token, bookings);
-        for(int i = 0; i < numberOfWeeksToRepeat; i++) {
+        for (int i = 0; i < numberOfWeeksToRepeat; i++) {
             bookings.setStartTime(bookings.getStartTime().plus(7, ChronoUnit.DAYS));
             bookings.setEndTime(bookings.getStartTime().plus(7, ChronoUnit.DAYS));
             addBooking(token, bookings);
@@ -79,13 +94,14 @@ public class BookingService {
     }
 
     public void deleteBookingById(int id) {
-        if(bookingRepository.existsById(id)) {
-        bookingRepository.deleteById(id);}
+        if (bookingRepository.existsById(id)) {
+            bookingRepository.deleteById(id);
+        }
         //save to deleted records? Mark deleted but don't remove from table?
     }
 
-    public List<Booking> getUserBookingsByUserId(int userId) {
-        return bookingRepository.findAllByUserId(userId);
+    public List<Booking> getUserBookingsByUser(User user) {
+        return bookingRepository.findAllByUser(user);
     }
 
     public List<Booking> getAllBookings() {
@@ -103,10 +119,9 @@ public class BookingService {
         return "Booking Pin: 123";
     }
 
-    //kuidagi peaks siin kasutaja saama juba enne teada, et tal on max täis kui tal nt on 6 broni
-    // ja tahab veel 6 teha, et ei broneeriks esimest nelja ja teisi mitte.
-    public boolean isNrOfBookingsLessThanMax(int id) {
-        List<Booking> userBookings = bookingRepository.findAllByUserId(id);
-        return userBookings.size() < maxNrOfBookingsPerUser;
+    public boolean isNrOfBookingsLessThanMax(User user) {
+        Instant now = Instant.now();
+        List<Booking> futureBookings = bookingRepository.findFutureBookingsByUser(user, now);
+        return futureBookings.size() < maxNrOfBookingsPerUser;
     }
 }
