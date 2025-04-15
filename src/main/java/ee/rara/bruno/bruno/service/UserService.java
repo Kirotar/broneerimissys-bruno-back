@@ -20,17 +20,6 @@ public UserService(UserRepository userRepository, JwtUtil jwtUtil) {
     this.jwtUtil = jwtUtil;
 }
 
-    public UserDto getUserInfo(String token) {
-        User user = getUserFromToken(token);
-
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setEmail(user.getEmail());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        return userDto;
-    }
-
     public User getUserFromToken(String token) {
         String jwt = token.substring(7);  // Remove "Bearer " prefix
 
@@ -41,4 +30,15 @@ public UserService(UserRepository userRepository, JwtUtil jwtUtil) {
     }
 
 
+    public UserDto getUserInfoByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setEmail(user.getEmail());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        return userDto;
+    }
 }

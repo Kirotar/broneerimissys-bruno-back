@@ -3,6 +3,7 @@ package ee.rara.bruno.bruno.controller;
 import ee.rara.bruno.bruno.dto.UserDto;
 import ee.rara.bruno.bruno.repository.UserRepository;
 import ee.rara.bruno.bruno.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,10 +17,13 @@ public class UserController {
         this.userService = userService;
     }
 
+
     @GetMapping("/info")
-    public UserDto getUserInfo(@RequestHeader("Authorization") String token) {
-        return userService.getUserInfo(token);
+    public UserDto getUserInfo(Authentication authentication) {
+        String email = authentication.getName();
+        return userService.getUserInfoByEmail(email);
     }
+
 
 
 }
