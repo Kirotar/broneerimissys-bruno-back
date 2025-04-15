@@ -6,9 +6,13 @@ import ee.rara.bruno.bruno.model.Role;
 import ee.rara.bruno.bruno.model.User;
 import ee.rara.bruno.bruno.repository.RoleRepository;
 import ee.rara.bruno.bruno.repository.UserRepository;
+import ee.rara.bruno.bruno.dto.JwtResponse;
 import ee.rara.bruno.bruno.util.JwtUtil;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,17 +47,29 @@ public class AuthService {
         return jwtUtil.generateToken(user.getUsername());
     }
 
-    public void registerUser(RegisterRequest request) {
+    public ResponseEntity<?> registerUser(RegisterRequest request) {
         User user = new User();
         Role role = roleRepository.findById(request.getRoleId()).orElse(null);
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        String rawPassword = request.getPassword();
+        user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole(role);
         user.setCreatedAt(Instant.now());
 
         userRepository.save(user);
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), rawPassword)
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwtToken = jwtUtil.generateToken(request.getEmail());
+
+        return ResponseEntity.ok(new JwtResponse(jwtToken));
     }
 }
 
