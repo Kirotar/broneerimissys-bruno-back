@@ -5,13 +5,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class PaymentService {
 
-    public boolean bookingPaymentStatus(BookingRequest request) {
+    public boolean bookingPaymentStatus(List<BookingRequest> booking) {
         boolean paymentStatus = Math.random() < 0.5;
-        request.setIsPaid(paymentStatus);
+        for (BookingRequest request  : booking) {
+            request.setIsPaid(paymentStatus);
+        }
         return paymentStatus;
     }
 
