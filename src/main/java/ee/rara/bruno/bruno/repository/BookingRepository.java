@@ -10,8 +10,8 @@ import java.time.Instant;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
-    @Query("SELECT b FROM Booking b WHERE b.user = :user")
-    List<Booking> findAllByUser(@Param("user") User user);
+    @Query("SELECT b FROM Booking b JOIN FETCH b.room WHERE b.user.id = :id")
+    List<Booking> findAllByUserId(@Param("id") int id);
 
 
     @Query("SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END FROM Booking b WHERE b.room.id = :roomId " +

@@ -8,6 +8,7 @@ import ee.rara.bruno.bruno.repository.BookingRepository;
 import ee.rara.bruno.bruno.repository.RoomRepository;
 import ee.rara.bruno.bruno.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -24,13 +25,15 @@ public class BookingService {
 
     private final RoomRepository roomRepository;
     private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
      private final UserService userService;
 
     public BookingService(RoomRepository roomRepository, BookingRepository bookingRepository,
-                            UserService userService) {
+                            UserService userService, UserRepository userRepository) {
         this.roomRepository = roomRepository;
         this.bookingRepository = bookingRepository;
          this.userService = userService;
+         this.userRepository = userRepository;
     }
 
     public void temporaryBooking(String token, List<BookingRequest> booking) {
@@ -87,9 +90,6 @@ public class BookingService {
         //save to deleted records? Mark deleted but don't remove from table?
     }
 
-    public List<Booking> getUserBookingsByUser(User user) {
-        return bookingRepository.findAllByUser(user);
-    }
 
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();

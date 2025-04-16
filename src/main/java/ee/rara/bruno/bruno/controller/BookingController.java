@@ -7,6 +7,7 @@ import ee.rara.bruno.bruno.model.User;
 import ee.rara.bruno.bruno.service.BookingService;
 import ee.rara.bruno.bruno.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,11 +48,9 @@ public class BookingController {
         bookingService.deleteBookingById(id);
     }
 
-    @GetMapping("/get-bookings/{id}")
-    @Operation(summary = "Kasutaja broneeringud ID järgi.")
-    public List<Booking> getUserBookingsByUserId(@PathVariable ("id") User user) {
-        return bookingService.getUserBookingsByUser(user);
-    }
+
+
+
     @GetMapping("/get-room-availability")
     @Operation(summary = "Kontrollib ruumi saadavust.")
     public boolean getRoomAvailability(@ModelAttribute BookingRequest query) {
