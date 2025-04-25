@@ -28,10 +28,6 @@ public class Booking {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    //drop?
-    @Column(name = "IS_BOOKED")
-    private Boolean isBooked;
-
     @Column(name = "IS_PAID", nullable = false)
     private Boolean isPaid = false;
 
@@ -52,4 +48,12 @@ public class Booking {
     @Column(name = "UPDATED_AT")
     private Instant updatedAt;
 
+    @Column(name = "NR_PARTICIPANTS")
+    private Integer nrParticipants;
+
+    @Column(name = "PIN")
+    private Integer PIN;
+
+    @Column(name = "TRANSACTION_REF")
+    private String transactionRef;
 }

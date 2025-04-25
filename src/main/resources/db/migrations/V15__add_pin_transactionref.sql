@@ -1,0 +1,2 @@
+ALTER TABLE booking ADD PIN INTEGER;
+ALTER TABLE booking ADD transaction_ref VARCHAR(100);
