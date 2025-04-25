@@ -64,6 +64,9 @@ public class UserService {
                     dto.setRoomFloor(booking.getRoom().getFloor());
                     dto.setStartTime(booking.getStartTime());
                     dto.setEndTime(booking.getEndTime());
+                    dto.setPrice(booking.getRoom().getPrice());
+                    dto.setTransactionRef(booking.getTransactionRef());
+                    dto.setPin(booking.getPIN());
                     return dto;
                 })
                 .toList();

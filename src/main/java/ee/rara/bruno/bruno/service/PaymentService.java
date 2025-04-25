@@ -1,6 +1,8 @@
 package ee.rara.bruno.bruno.service;
 
 import ee.rara.bruno.bruno.dto.BookingRequest;
+import ee.rara.bruno.bruno.model.Booking;
+import ee.rara.bruno.bruno.repository.BookingRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -10,10 +12,28 @@ import java.util.List;
 @Service
 public class PaymentService {
 
-    public boolean bookingPaymentStatus(List<BookingRequest> booking) {
-        boolean paymentStatus = Math.random() < 0.5;
-        for (BookingRequest request  : booking) {
-            request.setIsPaid(paymentStatus);
+    private final BookingRepository bookingRepository;
+    private final PINService pinService;
+
+    public PaymentService(BookingRepository bookingRepository, PINService pinService) {
+        this.bookingRepository = bookingRepository;
+        this.pinService = pinService;
+    }
+
+    public boolean bookingPaymentStatus(String transactionReference) {
+        boolean paymentStatus = Math.random() < 0.75;
+        List<Booking> bookings = bookingRepository.findByTransactionReference(transactionReference);
+
+        for (Booking booking  : bookings) {
+            booking.setIsPaid(paymentStatus);
+            bookingRepository.save(booking);
+        }
+        if (paymentStatus) {
+            pinService.savePIN(bookings);
+        }
+
+        if(!paymentStatus) {
+            bookingRepository.deleteAll(bookings);
         }
         return paymentStatus;
     }

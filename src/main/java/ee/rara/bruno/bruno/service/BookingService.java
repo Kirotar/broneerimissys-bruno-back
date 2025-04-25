@@ -1,18 +1,21 @@
 package ee.rara.bruno.bruno.service;
 
 import ee.rara.bruno.bruno.dto.BookingRequest;
+import ee.rara.bruno.bruno.dto.BookingSummaryDto;
 import ee.rara.bruno.bruno.model.Booking;
 import ee.rara.bruno.bruno.model.Room;
 import ee.rara.bruno.bruno.model.User;
 import ee.rara.bruno.bruno.repository.BookingRepository;
 import ee.rara.bruno.bruno.repository.RoomRepository;
 import ee.rara.bruno.bruno.repository.UserRepository;
+import ee.rara.bruno.bruno.util.RandomGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,9 +39,20 @@ public class BookingService {
          this.userRepository = userRepository;
     }
 
-    public void temporaryBooking(String token, List<BookingRequest> booking) {
-        for (BookingRequest request  : booking) {
-            addBooking(token, request);
+    public List<BookingSummaryDto> temporaryBooking(String token, List<BookingRequest> bookingRequests) {
+        String transactionRef = generateUniqueReference();
+        List<BookingSummaryDto> summaries = new ArrayList<>();
+
+        for (BookingRequest request : bookingRequests) {
+            Booking booking = addBooking(token, request, transactionRef);
+            if (booking != null) {
+                summaries.add(new BookingSummaryDto(
+                        booking.getRoom().getId(),
+                        transactionRef,
+                        booking.getRoom().getRoomName(),
+                        booking.getRoom().getPrice()
+                ));
+            }
         }
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -51,12 +65,18 @@ public class BookingService {
             }
             executor.shutdown();
         }, 10, TimeUnit.MINUTES);
+
+        return summaries;
     }
 
-    public void addBooking(String token, BookingRequest request) {
+    public String generateUniqueReference() {
+        return RandomGenerator.generateRandomString();
+    }
+
+    public Booking addBooking(String token, BookingRequest request, String transactionRef) {
         User user = userService.getUserFromToken(token);
 
-        if (isNrOfBookingsLessThanMax(user)){
+        if (isNrOfBookingsLessThanMax(user)) {
             Room room = roomRepository.findById(request.getRoomId())
                     .orElseThrow(() -> new EntityNotFoundException("Room not found"));
 
@@ -65,15 +85,20 @@ public class BookingService {
             booking.setUser(user);
             booking.setStartTime(request.getStartTime());
             booking.setEndTime(request.getEndTime());
+            booking.setTransactionRef(transactionRef);
             bookingRepository.save(booking);
 
             bookingPin(request.getBookingId());
+
+            return booking;
         } else {
             System.out.println("Booking request failed due to availability or limit.");
+            return null;
         }
     }
 
-    public void addRepeatedBooking(String token, BookingRequest bookings) {
+
+/*    public void addRepeatedBooking(String token, BookingRequest bookings) {
         int numberOfWeeksToRepeat = bookings.getNumberOfWeeksToRepeat();
         addBooking(token, bookings);
         for (int i = 0; i < numberOfWeeksToRepeat; i++) {
@@ -82,6 +107,7 @@ public class BookingService {
             addBooking(token, bookings);
         }
     }
+*/
 
     public void deleteBookingById(int id) {
         if (bookingRepository.existsById(id)) {
@@ -111,4 +137,5 @@ public class BookingService {
         List<Booking> futureBookings = bookingRepository.findFutureBookingsByUser(user, now);
         return futureBookings.size() < maxNrOfBookingsPerUser;
     }
+
 }

@@ -27,4 +27,10 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     @Query("SELECT b FROM Booking b WHERE b.user = :user AND b.endTime > :now")
     List<Booking> findFutureBookingsByUser(@Param("user") User user, @Param("now") Instant now);
+
+    @Query("SELECT b FROM Booking b WHERE b.transactionRef = :ref")
+    List<Booking> findByTransactionReference(@Param ("ref")String ref);
+
+    @Query("SELECT b.PIN FROM Booking b WHERE b.transactionRef = :ref")
+    List<Integer> findBookingPIN(@Param("ref") String ref);
 }

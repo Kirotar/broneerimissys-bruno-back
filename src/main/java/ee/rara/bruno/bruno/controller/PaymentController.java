@@ -16,7 +16,7 @@ public class PaymentController {
     }
 
     @PostMapping("/status")
-    public boolean bookingPaymentStatus(@RequestBody List<BookingRequest> booking) {
-        return paymentService.bookingPaymentStatus(booking);
+    public boolean bookingPaymentStatus(@RequestBody String transactionReference ) {
+        return paymentService.bookingPaymentStatus(transactionReference);
     }
 }
