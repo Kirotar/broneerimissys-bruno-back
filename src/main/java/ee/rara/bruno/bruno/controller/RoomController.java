@@ -37,6 +37,12 @@ public class RoomController {
         return roomService.getAllBookableRooms();
     }
 
+    @GetMapping("/get-query-rooms")
+    @Operation(summary = "Kõik ruumid, mida on võimalik päringuga broneerida.")
+    public List<Room> getAllQueryFormRooms() {
+        return roomService.getAllQueryFormRooms();
+    }
+
     @GetMapping("/is-bookable/{id}")
     @Operation(summary = "Kas saab broneerida jah/ei.")
     public boolean isBookable(@PathVariable int id) {

@@ -23,7 +23,11 @@ public class RoomService {
     }
 
     public List<Room> getAllBookableRooms() {
-        return roomRepository.findAllRoomsThatCanBook();
+        return roomRepository.findRoomsByBookingStatus(true);
+    }
+
+    public List<Room> getAllQueryFormRooms() {
+        return roomRepository.findRoomsByBookingStatus(false);
     }
 
     public boolean isRoomBookable(int id){
@@ -78,6 +82,4 @@ public class RoomService {
 
              roomRepository.save(room);
     }
-
-    //ResponseEntity, error handling
 }

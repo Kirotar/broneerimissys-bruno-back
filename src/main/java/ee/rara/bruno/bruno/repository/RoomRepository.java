@@ -26,6 +26,6 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
     @Query("SELECT CASE WHEN EXISTS (SELECT r FROM Room r WHERE r.id = :id AND r.canBook = true) THEN true ELSE false END")
     boolean findIfCanBook(int id);
 
-    @Query("SELECT r FROM Room r WHERE r.canBook = true")
-    List <Room> findAllRoomsThatCanBook();
+    @Query("SELECT r FROM Room r WHERE r.canBook = :canBookValue")
+    List<Room> findRoomsByBookingStatus(@Param("canBookValue") boolean canBookValue);
 }
